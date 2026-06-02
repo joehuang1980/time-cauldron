@@ -17,114 +17,243 @@
             background-color: var(--paper-bg);
             color: #2d1e10;
             margin: 0;
-            padding: 20px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             user-select: none;
+            font-size: 18px;
         }
+        
+        /* Main responsive wrapper for iPad screen sizes */
+        .app-container {
+            width: 100%;
+            max-width: 850px; /* Perfect width for iPad portrait & landscape */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         h1 {
             color: var(--wizard-maroon);
             letter-spacing: 2px;
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 36px;
+            margin: 0 0 5px 0;
+            text-align: center;
         }
-        .subtitle { font-style: italic; font-size: 14px; margin-bottom: 20px; color: #555; }
+        .subtitle { 
+            font-style: italic; 
+            font-size: 16px; 
+            margin-bottom: 25px; 
+            color: #555; 
+        }
         
+        /* Profile Selector Styling */
+        .profile-card {
+            background: #7f1d1d;
+            color: #fff;
+            border-radius: 35px;
+            padding: 12px 25px;
+            width: 100%;
+            max-width: 380px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+        }
+        .profile-label { 
+            font-weight: bold; 
+            font-size: 16px; 
+            letter-spacing: 1px; 
+        }
+        .profile-select {
+            background: var(--wizard-gold);
+            color: #7f1d1d;
+            font-weight: bold;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+        }
+
         /* Cauldron Visual Design */
         .cauldron-container {
-            width: 180px; height: 180px;
+            width: 220px; height: 220px;
             background: radial-gradient(circle at 30% 30%, #374151, #111827);
-            border-radius: 50px 50px 100px 100px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-radius: 60px 60px 110px 110px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
             position: relative;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border: 4px solid #1f2937; margin-bottom: 25px;
+            border: 5px solid #1f2937; margin-bottom: 35px;
         }
         .cauldron-container::before {
-            content: ''; position: absolute; top: -10px; width: 160px; height: 20px; background: #1f2937; border-radius: 50%;
+            content: ''; position: absolute; top: -12px; width: 200px; height: 24px; background: #1f2937; border-radius: 50%;
         }
-        .balance-num { font-size: 50px; font-weight: bold; color: var(--wizard-gold); z-index: 1; }
-        .balance-label { color: #fff; font-size: 10px; font-weight: bold; z-index: 1; }
+        .balance-num { 
+            font-size: 70px; 
+            font-weight: bold; 
+            color: var(--wizard-gold); 
+            z-index: 1; 
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+        }
+        .balance-label { 
+            color: #fff; 
+            font-size: 12px; 
+            font-weight: bold; 
+            z-index: 1; 
+            letter-spacing: 1px;
+        }
         
-        /* Cards and Buttons */
-        .section-card {
-            background: #fff; border: 2px solid #e5e7eb; border-radius: 12px;
-            padding: 15px; width: 100%; max-width: 350px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        /* ✨ iPad Responsive Grid System ✨ */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr; /* Stacks vertically on phone */
+            gap: 25px;
+            width: 100%;
+            margin-bottom: 20px;
         }
-        h3 { margin-top: 0; color: var(--wizard-maroon); font-size: 16px; }
-        select, input, button { width: 100%; padding: 10px; margin: 5px 0 10px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; box-sizing: border-box; }
-        button { background-color: var(--wizard-maroon); color: white; border: none; font-weight: bold; cursor: pointer; }
-        button:active { background-color: #b91c1c; }
-        .btn-gold { background-color: #b45309; }
+        
+        /* When screen width fits iPad/Tablet */
+        @media (min-width: 650px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr; /* Split into Left & Right columns on iPad */
+            }
+        }
+
+        /* Cards and Layout Components */
+        .section-card {
+            background: #fff; 
+            border: 2px solid #e5e7eb; 
+            border-radius: 16px;
+            padding: 22px; 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.06); 
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        h3 { margin-top: 0; color: var(--wizard-maroon); font-size: 22px; margin-bottom: 15px; }
+        label { font-size: 15px; font-weight: bold; color: #444; margin-bottom: 4px; display: block; }
+        
+        /* Sizing adjustments for inputs and large touch targets */
+        select, input, button { 
+            width: 100%; 
+            padding: 14px; 
+            margin: 6px 0 16px 0; 
+            border-radius: 10px; 
+            border: 1px solid #bbb; 
+            font-size: 17px; 
+            box-sizing: border-box; 
+        }
+        button { 
+            background-color: var(--wizard-maroon); 
+            color: white; 
+            border: none; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 18px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(127, 29, 29, 0.2);
+            margin-bottom: 0; /* Align perfectly */
+        }
+        button:active { background-color: #b91c1c; transform: scale(0.99); }
+        .btn-gold { background-color: #b45309; box-shadow: 0 4px 6px rgba(180, 83, 9, 0.2); }
         .btn-gold:active { background-color: #d97706; }
-        .parent-btn { background: none; color: #777; font-size: 12px; text-decoration: underline; margin-top: 10px; border: none; }
+        
+        .parent-btn { background: none; color: #777; font-size: 14px; text-decoration: underline; margin-top: 20px; border: none; box-shadow: none; padding: 5px; width: auto;}
         
         /* Parchment Log Styles */
         .log-box {
             background-color: #fefcf6; border: 1px dashed #b45309; border-radius: 8px;
-            padding: 10px; max-height: 200px; overflow-y: auto; font-size: 12px; font-family: monospace;
+            padding: 12px; max-height: 250px; overflow-y: auto; font-size: 14px; font-family: monospace;
         }
-        .log-entry { margin-bottom: 6px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
-        .log-deposit { color: green; }
-        .log-withdraw { color: red; }
+        .log-entry { margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 6px; }
+        .log-deposit { color: green; font-weight: bold; }
+        .log-withdraw { color: red; font-weight: bold; }
         .log-system { color: blue; font-style: italic; }
+        
+        /* Full width card for parent logs under the grid */
+        .full-width-card {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 
-    <h1>THE TIME CAULDRON</h1>
-    <div class="subtitle">"Your reading turns into magic time!"</div>
+    <div class="app-container">
+        <h1>THE TIME CAULDRON</h1>
+        <div class="subtitle">"Your reading turns into magic time!"</div>
 
-    <div class="cauldron-container">
-        <div class="balance-num" id="balanceDisplay">0</div>
-        <div class="balance-label">MINUTES LEFT</div>
+        <div class="profile-card">
+            <span class="profile-label">🔮 ACTIVE WIZARD:</span>
+            <select id="profileSelector" class="profile-select" onchange="changeProfile()">
+                <option value="child1">Olivia</option>
+                <option value="child2">Lucas</option>
+            </select>
+        </div>
+
+        <div class="cauldron-container">
+            <div class="balance-num" id="balanceDisplay">0</div>
+            <div class="balance-label">MINUTES LEFT</div>
+        </div>
+
+        <div class="grid-container">
+            
+            <div class="section-card">
+                <div>
+                    <h3>📜 Pour Reading Time</h3>
+                    <label for="bookType">Choose your book type:</label>
+                    <select id="bookType">
+                        <option value="1.0" data-name="Magazine">Magazine (Rate 1:1)</option>
+                        <option value="1.5" data-name="Chinese Short Book">Chinese Short Book (Rate 1:1.5)</option>
+                        <option value="1.8" data-name="English Short Book">English Short Book (Rate 1:1.8)</option>
+                        <option value="2.0" data-name="English Long Novel">English Long Novel (Rate 1:2.0) 🌟</option>
+                    </select>
+                    <label for="readMins">How many minutes did you read?</label>
+                    <input type="number" id="readMins" placeholder="Enter minutes here" min="1">
+                </div>
+                <button onclick="addTime()">Cast Reading Spell!</button>
+            </div>
+
+            <div class="section-card">
+                <div>
+                    <h3>🔮 Use Video Time</h3>
+                    <label for="videoType">What will you watch?</label>
+                    <select id="videoType">
+                        <option value="LEGO">LEGO Video (Max 45m/day)</option>
+                        <option value="Pikmin">Pikmin Guide (Max 25m/day)</option>
+                        <option value="Other">Other Videos</option>
+                    </select>
+                    <label for="watchMins">How many minutes will you watch?</label>
+                    <input type="number" id="watchMins" placeholder="Enter minutes here" min="1">
+                </div>
+                <button class="btn-gold" onclick="useTime()">Open Video Portal</button>
+            </div>
+            
+        </div>
+
+        <div class="section-card full-width-card" id="parentSection" style="display: none;">
+            <h3>🔑 Headmaster's Parchment (<span id="logTargetName">Logs</span>)</h3>
+            <div class="log-box" id="logContainer"></div>
+            <button style="background: #4b5563; margin-top: 15px;" onclick="clearLogs()">Clear Current Logs</button>
+            <button style="background: #9ca3af; margin-top: 5px;" onclick="hideParentSection()">Lock Office</button>
+        </div>
+
+        <button class="parent-btn" id="openOfficeBtn" onclick="openParentGate()">Parents Desk (Hidden Office)</button>
     </div>
-
-    <div class="section-card">
-        <h3>📜 Pour Reading Time</h3>
-        <label for="bookType">Choose your book type:</label>
-        <select id="bookType">
-            <option value="1.0" data-name="Magazine">Magazine (Rate 1:1)</option>
-            <option value="1.5" data-name="Chinese Short Book">Chinese Short Book (Rate 1:1.5)</option>
-            <option value="1.8" data-name="English Short Book">English Short Book (Rate 1:1.8)</option>
-            <option value="2.0" data-name="English Long Novel">English Long Novel (Rate 1:2.0) 🌟</option>
-        </select>
-        <label for="readMins">How many minutes did you read?</label>
-        <input type="number" id="readMins" placeholder="Enter minutes here" min="1">
-        <button onclick="addTime()">Cast Reading Spell!</button>
-    </div>
-
-    <div class="section-card">
-        <h3>🔮 Use Video Time</h3>
-        <label for="videoType">What will you watch?</label>
-        <select id="videoType">
-            <option value="LEGO">LEGO Video (Max 45m/day)</option>
-            <option value="Pikmin">Pikmin Guide (Max 25m/day)</option>
-            <option value="Other">Other Videos</option>
-        </select>
-        <label for="watchMins">How many minutes will you watch?</label>
-        <input type="number" id="watchMins" placeholder="Enter minutes here" min="1">
-        <button class="btn-gold" onclick="useTime()">Open Video Portal</button>
-    </div>
-
-    <div class="section-card" id="parentSection" style="display: none;">
-        <h3>🔑 Headmaster's Parchment (Parent Logs)</h3>
-        <div class="log-box" id="logContainer"></div>
-        <button style="background: #4b5563; margin-top: 10px;" onclick="clearLogs()">Clear All Logs</button>
-        <button style="background: #9ca3af; margin-top: 5px;" onclick="hideParentSection()">Lock Office</button>
-    </div>
-
-    <button class="parent-btn" id="openOfficeBtn" onclick="openParentGate()">Parents Desk (Hidden Office)</button>
 
     <script>
-        // Load data from local storage
-        let state = JSON.parse(localStorage.getItem('wizardTimeBankV2')) || {
-            totalMins: 0,
-            legoToday: 0,
-            pikminToday: 0,
-            lastDate: new Date().toDateString(),
-            logs: []
+        let state = JSON.parse(localStorage.getItem('wizardTimeBankV4')) || {
+            currentActive: "child1",
+            profiles: {
+                child1: { name: "Olivia", totalMins: 0, legoToday: 0, pikminToday: 0, lastDate: new Date().toDateString(), logs: [] },
+                child2: { name: "Lucas", totalMins: 0, legoToday: 0, pikminToday: 0, lastDate: new Date().toDateString(), logs: [] }
+            }
         };
 
         function getTimestamp() {
@@ -133,41 +262,59 @@
         }
 
         function addLog(text, typeClass) {
+            let activeProfile = state.profiles[state.currentActive];
             let timeStr = getTimestamp();
-            state.logs.unshift({ time: timeStr, text: text, type: typeClass });
-            if(state.logs.length > 100) state.logs.pop(); // Keep last 100 entries
+            activeProfile.logs.unshift({ time: timeStr, text: text, type: typeClass });
+            if(activeProfile.logs.length > 100) activeProfile.logs.pop();
         }
 
         function checkDailyReset() {
             let today = new Date().toDateString();
-            if (state.lastDate !== today) {
-                addLog(`System reset daily limits. (Prev LEGO:${state.legoToday}m, Pikmin:${state.pikminToday}m)`, 'log-system');
-                state.legoToday = 0;
-                state.pikminToday = 0;
-                state.lastDate = today;
-                saveData();
+            for (let key in state.profiles) {
+                let p = state.profiles[key];
+                if (p.lastDate !== today) {
+                    p.logs.unshift({
+                        time: getTimestamp(),
+                        text: `System reset daily limits. (Prev LEGO:${p.legoToday}m, Pikmin:${p.pikminToday}m)`,
+                        type: 'log-system'
+                    });
+                    p.legoToday = 0;
+                    p.pikminToday = 0;
+                    p.lastDate = today;
+                }
             }
+            saveData();
         }
 
         function saveData() {
-            localStorage.setItem('wizardTimeBankV2', JSON.stringify(state));
-            document.getElementById('balanceDisplay').innerText = Math.floor(state.totalMins);
+            localStorage.setItem('wizardTimeBankV4', JSON.stringify(state));
+            let activeProfile = state.profiles[state.currentActive];
+            document.getElementById('balanceDisplay').innerText = Math.floor(activeProfile.totalMins);
+            document.getElementById('logTargetName').innerText = activeProfile.name + " Logs";
             renderLogs();
         }
 
         function renderLogs() {
             let container = document.getElementById('logContainer');
-            if (state.logs.length === 0) {
+            let activeProfile = state.profiles[state.currentActive];
+            if (!activeProfile.logs || activeProfile.logs.length === 0) {
                 container.innerHTML = '<div style="color:#999; text-align:center;">No magic logs yet.</div>';
                 return;
             }
-            container.innerHTML = state.logs.map(log => 
+            container.innerHTML = activeProfile.logs.map(log => 
                 `<div class="log-entry ${log.type}">[${log.time}] ${log.text}</div>`
             ).join('');
         }
 
+        function changeProfile() {
+            state.currentActive = document.getElementById('profileSelector').value;
+            checkDailyReset();
+            saveData();
+        }
+
         function addTime() {
             checkDailyReset();
+            let activeProfile = state.profiles[state.currentActive];
             let select = document.getElementById('bookType');
             let rate = parseFloat(select.value);
             let bookName = select.options[select.selectedIndex].getAttribute('data-name');
@@ -176,39 +323,40 @@
             if (!mins || mins <= 0) { alert("Please enter valid minutes!"); return; }
 
             let earned = mins * rate;
-            state.totalMins += earned;
+            activeProfile.totalMins += earned;
             addLog(`+ Added ${earned}m (Read ${mins}m of ${bookName})`, 'log-deposit');
             saveData();
-            alert(`🪄 Success! Added ${earned} minutes to your cauldron!`);
+            alert(`🪄 Success! Added ${earned} minutes to ${activeProfile.name}'s cauldron!`);
             document.getElementById('readMins').value = '';
         }
 
         function useTime() {
             checkDailyReset();
+            let activeProfile = state.profiles[state.currentActive];
             let type = document.getElementById('videoType').value;
             let mins = parseFloat(document.getElementById('watchMins').value);
             
             if (!mins || mins <= 0) { alert("Please enter valid minutes!"); return; }
-            if (mins > state.totalMins) { alert("❌ Not enough magic time! Go read some books!"); return; }
+            if (mins > activeProfile.totalMins) { alert("❌ Not enough magic time! Go read some books!"); return; }
 
-            if (type === "LEGO" && (state.legoToday + mins > 45)) {
-                alert(`❌ Too much LEGO today! You can only watch ${45 - state.legoToday} more minutes.`); return;
+            if (type === "LEGO" && (activeProfile.legoToday + mins > 45)) {
+                alert(`❌ Too much LEGO today! You can only watch ${45 - activeProfile.legoToday} more minutes.`); return;
             }
-            // BUG FIXED: Changed 'state.state.pikminToday' to 'state.pikminToday'
-            if (type === "Pikmin" && (state.pikminToday + mins > 25)) {
-                alert(`❌ Too much Pikmin today! You can only watch ${25 - state.pikminToday} more minutes.`); return;
+            if (type === "Pikmin" && (activeProfile.pikminToday + mins > 25)) {
+                alert(`❌ Too much Pikmin today! You can only watch ${25 - activeProfile.pikminToday} more minutes.`); return;
             }
 
-            state.totalMins -= mins;
-            if (type === "LEGO") state.legoToday += mins;
-            if (type === "Pikmin") state.pikminToday += mins;
+            activeProfile.totalMins -= mins;
+            if (type === "LEGO") activeProfile.legoToday += mins;
+            if (type === "Pikmin") activeProfile.pikminToday += mins;
             
             addLog(`- Used ${mins}m watching ${type} Video`, 'log-withdraw');
             saveData();
-            alert("🔮 Portal opened! Enjoy your video time.");
+            alert(`🔮 Portal opened! Enjoy your video time, ${activeProfile.name}.`);
             document.getElementById('watchMins').value = '';
         }
 
+        // 🔒 16-digit Headmaster Key
         function openParentGate() {
             let password = prompt("[SECURITY VERIFICATION]\nEnter the 16-digit Headmaster Key to view logs:");
             
@@ -216,6 +364,8 @@
                 document.getElementById('parentSection').style.display = 'block';
                 document.getElementById('openOfficeBtn').style.display = 'none';
                 renderLogs();
+                // Smooth scroll to view logs
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             } else if (password !== null) {
                 alert("💥 Access Denied! Invalid Key.");
             }
@@ -227,14 +377,15 @@
         }
 
         function clearLogs() {
-            if(confirm("Do you want to burn all parchment records (Clear Logs)?")) {
-                state.logs = [];
+            let activeProfile = state.profiles[state.currentActive];
+            if(confirm(`Do you want to burn all parchment records for ${activeProfile.name}?`)) {
+                activeProfile.logs = [];
                 addLog("Parchment cleared by Headmaster.", "log-system");
                 saveData();
             }
         }
 
-        // Initialize display on load
+        document.getElementById('profileSelector').value = state.currentActive;
         checkDailyReset();
         saveData();
     </script>

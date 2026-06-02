@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Time Cauldron</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        :root {
+            --wizard-gold: #fbbf24;
+            --wizard-maroon: #7f1d1d;
+            --paper-bg: #f5f0e1;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--paper-bg);
+            color: #2d1e10;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+        }
+        h1 {
+            color: var(--wizard-maroon);
+            letter-spacing: 2px;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .subtitle { font-style: italic; font-size: 14px; margin-bottom: 20px; color: #555; }
+        
+        /* Cauldron Visual Design */
+        .cauldron-container {
+            width: 180px; height: 180px;
+            background: radial-gradient(circle at 30% 30%, #374151, #111827);
+            border-radius: 50px 50px 100px 100px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            position: relative;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border: 4px solid #1f2937; margin-bottom: 25px;
+        }
+        .cauldron-container::before {
+            content: ''; position: absolute; top: -10px; width: 160px; height: 20px; background: #1f2937; border-radius: 50%;
+        }
+        .balance-num { font-size: 50px; font-weight: bold; color: var(--wizard-gold); z-index: 1; }
+        .balance-label { color: #fff; font-size: 10px; font-weight: bold; z-index: 1; }
+        
+        /* Cards and Buttons */
+        .section-card {
+            background: #fff; border: 2px solid #e5e7eb; border-radius: 12px;
+            padding: 15px; width: 100%; max-width: 350px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        h3 { margin-top: 0; color: var(--wizard-maroon); font-size: 16px; }
+        select, input, button { width: 100%; padding: 10px; margin: 5px 0 10px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; box-sizing: border-box; }
+        button { background-color: var(--wizard-maroon); color: white; border: none; font-weight: bold; cursor: pointer; }
+        button:active { background-color: #b91c1c; }
+        .btn-gold { background-color: #b45309; }
+        .btn-gold:active { background-color: #d97706; }
+        .parent-btn { background: none; color: #777; font-size: 12px; text-decoration: underline; margin-top: 10px; border: none; }
+        
+        /* Parchment Log Styles */
+        .log-box {
+            background-color: #fefcf6; border: 1px dashed #b45309; border-radius: 8px;
+            padding: 10px; max-height: 200px; overflow-y: auto; font-size: 12px; font-family: monospace;
+        }
+        .log-entry { margin-bottom: 6px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+        .log-deposit { color: green; }
+        .log-withdraw { color: red; }
+        .log-system { color: blue; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <h1>THE TIME CAULDRON</h1>
+    <div class="subtitle">"Your reading turns into magic time!"</div>
+
+    <div class="cauldron-container">
+        <div class="balance-num" id="balanceDisplay">0</div>
+        <div class="balance-label">MINUTES LEFT</div>
+    </div>
+
+    <div class="section-card">
+        <h3>📜 Pour Reading Time</h3>
+        <label for="bookType">Choose your book type:</label>
+        <select id="bookType">
+            <option value="1.0" data-name="Magazine">Magazine (Rate 1:1)</option>
+            <option value="1.5" data-name="Chinese Short Book">Chinese Short Book (Rate 1:1.5)</option>
+            <option value="1.8" data-name="English Short Book">English Short Book (Rate 1:1.8)</option>
+            <option value="2.0" data-name="English Long Novel">English Long Novel (Rate 1:2.0) 🌟</option>
+        </select>
+        <label for="readMins">How many minutes did you read?</label>
+        <input type="number" id="readMins" placeholder="Enter minutes here" min="1">
+        <button onclick="addTime()">Cast Reading Spell!</button>
+    </div>
+
+    <div class="section-card">
+        <h3>🔮 Use Video Time</h3>
+        <label for="videoType">What will you watch?</label>
+        <select id="videoType">
+            <option value="LEGO">LEGO Video (Max 45m/day)</option>
+            <option value="Pikmin">Pikmin Guide (Max 25m/day)</option>
+            <option value="Other">Other Videos</option>
+        </select>
+        <label for="watchMins">How many minutes will you watch?</label>
+        <input type="number" id="watchMins" placeholder="Enter minutes here" min="1">
+        <button class="btn-gold" onclick="useTime()">Open Video Portal</button>
+    </div>
+
+    <div class="section-card" id="parentSection" style="display: none;">
+        <h3>🔑 Headmaster's Parchment (Parent Logs)</h3>
+        <div class="log-box" id="logContainer"></div>
+        <button style="background: #4b5563; margin-top: 10px;" onclick="clearLogs()">Clear All Logs</button>
+        <button style="background: #9ca3af; margin-top: 5px;" onclick="hideParentSection()">Lock Office</button>
+    </div>
+
+    <button class="parent-btn" id="openOfficeBtn" onclick="openParentGate()">Parents Desk (Hidden Office)</button>
+
+    <script>
+        // Load data from local storage
+        let state = JSON.parse(localStorage.getItem('wizardTimeBankV2')) || {
+            totalMins: 0,
+            legoToday: 0,
+            pikminToday: 0,
+            lastDate: new Date().toDateString(),
+            logs: []
+        };
+
+        function getTimestamp() {
+            let now = new Date();
+            return `${now.getMonth()+1}/${now.getDate()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+        }
+
+        function addLog(text, typeClass) {
+            let timeStr = getTimestamp();
+            state.logs.unshift({ time: timeStr, text: text, type: typeClass });
+            if(state.logs.length > 100) state.logs.pop(); // Keep last 100 entries
+        }
+
+        function checkDailyReset() {
+            let today = new Date().toDateString();
+            if (state.lastDate !== today) {
+                addLog(`System reset daily limits. (Prev LEGO:${state.legoToday}m, Pikmin:${state.pikminToday}m)`, 'log-system');
+                state.legoToday = 0;
+                state.pikminToday = 0;
+                state.lastDate = today;
+                saveData();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('wizardTimeBankV2', JSON.stringify(state));
+            document.getElementById('balanceDisplay').innerText = Math.floor(state.totalMins);
+            renderLogs();
+        }
+
+        function renderLogs() {
+            let container = document.getElementById('logContainer');
+            if (state.logs.length === 0) {
+                container.innerHTML = '<div style="color:#999; text-align:center;">No magic logs yet.</div>';
+                return;
+            }
+            container.innerHTML = state.logs.map(log => 
+                `<div class="log-entry ${log.type}">[${log.time}] ${log.text}</div>`
+            ).join('');
+        }
+
+        function addTime() {
+            checkDailyReset();
+            let select = document.getElementById('bookType');
+            let rate = parseFloat(select.value);
+            let bookName = select.options[select.selectedIndex].getAttribute('data-name');
+            let mins = parseFloat(document.getElementById('readMins').value);
+            
+            if (!mins || mins <= 0) { alert("Please enter valid minutes!"); return; }
+
+            let earned = mins * rate;
+            state.totalMins += earned;
+            addLog(`+ Added ${earned}m (Read ${mins}m of ${bookName})`, 'log-deposit');
+            saveData();
+            alert(`🪄 Success! Added ${earned} minutes to your cauldron!`);
+            document.getElementById('readMins').value = '';
+        }
+
+        function useTime() {
+            checkDailyReset();
+            let type = document.getElementById('videoType').value;
+            let mins = parseFloat(document.getElementById('watchMins').value);
+            
+            if (!mins || mins <= 0) { alert("Please enter valid minutes!"); return; }
+            if (mins > state.totalMins) { alert("❌ Not enough magic time! Go read some books!"); return; }
+
+            if (type === "LEGO" && (state.legoToday + mins > 45)) {
+                alert(`❌ Too much LEGO today! You can only watch ${45 - state.legoToday} more minutes.`); return;
+            }
+            // BUG FIXED: Changed 'state.state.pikminToday' to 'state.pikminToday'
+            if (type === "Pikmin" && (state.pikminToday + mins > 25)) {
+                alert(`❌ Too much Pikmin today! You can only watch ${25 - state.pikminToday} more minutes.`); return;
+            }
+
+            state.totalMins -= mins;
+            if (type === "LEGO") state.legoToday += mins;
+            if (type === "Pikmin") state.pikminToday += mins;
+            
+            addLog(`- Used ${mins}m watching ${type} Video`, 'log-withdraw');
+            saveData();
+            alert("🔮 Portal opened! Enjoy your video time.");
+            document.getElementById('watchMins').value = '';
+        }
+
+        function openParentGate() {
+            let password = prompt("[SECURITY VERIFICATION]\nEnter the 16-digit Headmaster Key to view logs:");
+            
+            if (password === "1979081219800707") {
+                document.getElementById('parentSection').style.display = 'block';
+                document.getElementById('openOfficeBtn').style.display = 'none';
+                renderLogs();
+            } else if (password !== null) {
+                alert("💥 Access Denied! Invalid Key.");
+            }
+        }
+
+        function hideParentSection() {
+            document.getElementById('parentSection').style.display = 'none';
+            document.getElementById('openOfficeBtn').style.display = 'block';
+        }
+
+        function clearLogs() {
+            if(confirm("Do you want to burn all parchment records (Clear Logs)?")) {
+                state.logs = [];
+                addLog("Parchment cleared by Headmaster.", "log-system");
+                saveData();
+            }
+        }
+
+        // Initialize display on load
+        checkDailyReset();
+        saveData();
+    </script>
+</body>
+</html>

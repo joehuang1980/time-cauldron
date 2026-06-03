@@ -57,26 +57,25 @@
             padding: 8px 20px; border-radius: 20px; font-size: 16px; width: auto; cursor: pointer;
         }
 
-        /* 🧙‍♂️ Magic Powder Particle Effect */
+        /* ✨ New 10-Burst Magic Powder Style */
         .magic-powder {
             position: absolute;
-            width: 20px; height: 20px;
+            width: 10px; height: 10px; /* Smaller, sparkling particle sizing */
             border-radius: 50%;
-            top: 100px;
+            top: 70px;
             opacity: 0;
             z-index: 10;
             pointer-events: none;
-            filter: blur(2px);
-            box-shadow: 0 0 15px currentColor;
+            filter: blur(1px);
         }
-        @keyframes dropPowder {
-            0% { top: 80px; opacity: 0; transform: scale(0.5); }
-            20% { opacity: 1; transform: scale(1.2); }
-            80% { opacity: 1; transform: scale(1); }
-            100% { top: 220px; opacity: 0; transform: scale(0.2); }
+        @keyframes dropPowderAnimation {
+            0% { top: 70px; opacity: 0; transform: scale(0.4) translateX(0); }
+            20% { opacity: 1; transform: scale(1.3); }
+            80% { opacity: 1; }
+            100% { top: 220px; opacity: 0; transform: scale(0.2) translateX(var(--drift)); }
         }
 
-        /* ⚗️ Cauldron with Animated Liquid Inside */
+        /* ⚗️ Cauldron Visual Design */
         .cauldron-container {
             width: 220px; height: 220px;
             background: radial-gradient(circle at 30% 30%, #374151, #111827);
@@ -85,7 +84,7 @@
             position: relative;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             border: 5px solid #1f2937; margin-bottom: 35px;
-            overflow: hidden; /* Keeps liquid inside */
+            overflow: hidden;
         }
         .cauldron-container::before {
             content: ''; position: absolute; top: -2px; width: 210px; height: 20px; 
@@ -96,20 +95,18 @@
         .cauldron-liquid {
             position: absolute;
             bottom: 0; left: 0; width: 100%;
-            height: 65%; /* Liquid fill level */
+            height: 65%; 
             background-color: var(--liquid-color);
             z-index: 1;
             transition: background-color 0.8s ease, height 1s ease;
             box-shadow: inset 0 10px 20px rgba(255,255,255,0.2);
             animation: liquidBreathe 4s ease-in-out infinite;
         }
-        
         @keyframes liquidBreathe {
             0%, 100% { height: 63%; filter: brightness(1); }
             50% { height: 67%; filter: brightness(1.2); }
         }
         
-        /* Magic Flash and Shake Animations */
         .shake { animation: cauldronShake 0.5s linear infinite; }
         @keyframes cauldronShake {
             0%, 100% { transform: translateX(0); }
@@ -155,9 +152,7 @@
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="magic-powder" id="magicPowder"></div>
-
+    <div class="app-container" id="mainContainer">
         <h1>THE TIME CAULDRON</h1>
         <div class="subtitle">"Your reading turns into magic time!"</div>
 
@@ -221,8 +216,8 @@
     </div>
 
     <script>
-        // Database upgraded to V5 to hold new styling architecture
-        let state = JSON.parse(localStorage.getItem('wizardTimeBankV5')) || {
+        // Database upgraded to V6 to support dynamic multiple particle architecture
+        let state = JSON.parse(localStorage.getItem('wizardTimeBankV6')) || {
             currentActive: "child1",
             profiles: {
                 child1: { name: "Olivia", totalMins: 0, legoToday: 0, pikminToday: 0, lastDate: new Date().toDateString(), logs: [] },
@@ -259,15 +254,14 @@
         }
 
         function saveData() {
-            localStorage.setItem('wizardTimeBankV5', JSON.stringify(state));
+            localStorage.setItem('wizardTimeBankV6', JSON.stringify(state));
             let activeProfile = state.profiles[state.currentActive];
             document.getElementById('balanceDisplay').innerText = Math.floor(activeProfile.totalMins);
             document.getElementById('logTargetName').innerText = activeProfile.name + " Logs";
             
-            // Adjust baseline liquid fill depending on empty or full cauldron
             let liquidEl = document.getElementById('cauldronLiquid');
             if (activeProfile.totalMins <= 0) {
-                liquidEl.style.height = "15%"; // Almost empty mud
+                liquidEl.style.height = "15%"; 
                 document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.2)');
             } else {
                 liquidEl.style.height = "65%";
@@ -293,7 +287,36 @@
             saveData();
         }
 
-        // 🟢🟣🔵🟡 Add Time and Trigger Powder/Glow Magic Animation
+        // 🌟 New Core Magic Function: Spawns 10 particles rapidly with random drift and delays
+        function spawnPowderBurst(color) {
+            let container = document.getElementById('mainContainer');
+            
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    let particle = document.createElement('div');
+                    particle.className = 'magic-powder';
+                    particle.style.backgroundColor = color;
+                    particle.style.boxShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
+                    
+                    // Center the spawn position above the cauldron container horizontally
+                    let centerOffsetX = (Math.random() * 60) - 30; // Spread spawn starting point slightly
+                    particle.style.left = `calc(50% + ${centerOffsetX}px)`;
+                    
+                    // Set random left/right drift during fall using CSS variable
+                    let randomDrift = (Math.random() * 50) - 25; 
+                    particle.style.setProperty('--drift', `${randomDrift}px`);
+                    
+                    // Set a quick fall animation length
+                    particle.style.animation = 'dropPowderAnimation 0.7s ease-in forwards';
+                    
+                    container.appendChild(particle);
+                    
+                    // Clean memory up immediately after completion
+                    setTimeout(() => { particle.remove(); }, 700);
+                }, i * 60); // 10 particles staggered every 60 milliseconds (Total duration ~0.6 seconds burst)
+            }
+        }
+
         function addTime() {
             checkDailyReset();
             let activeProfile = state.profiles[state.currentActive];
@@ -309,33 +332,24 @@
             activeProfile.totalMins += earned;
             addLog(`+ Added ${earned}m (Read ${mins}m of ${bookName})`, 'log-deposit');
 
-            // ANIMATION MAGIC START
-            let powder = document.getElementById('magicPowder');
-            let liquid = document.getElementById('cauldronLiquid');
-            
-            // 1. Drop colored powder
-            powder.style.color = magicColor;
-            powder.style.backgroundColor = magicColor;
-            powder.style.animation = 'none';
-            powder.offsetHeight; // Trigger reflow to restart animation
-            powder.style.animation = 'dropPowder 1.2s ease-in forwards';
+            // 🌟 TRIGGER THE 10-POWDER BURST
+            spawnPowderBurst(magicColor);
 
-            // 2. Change liquid to magic color when powder hits it (after 0.8s)
+            // Animate liquid rising right when the bulk of powder hits (~0.5 seconds in)
+            let liquid = document.getElementById('cauldronLiquid');
             setTimeout(() => {
-                document.documentElement.style.setProperty('--liquid-color', magicColor + "99"); // Add alpha opacity
-                liquid.style.height = "75%"; // Surge up dynamically!
+                document.documentElement.style.setProperty('--liquid-color', magicColor + "99"); 
+                liquid.style.height = "78%"; 
                 
-                // Return to default warm ambiance after animation finishes
                 setTimeout(() => {
                     saveData();
-                }, 1500);
-            }, 800);
+                }, 1200);
+            }, 500);
 
             alert(`🪄 Success! Added ${earned} minutes to ${activeProfile.name}'s cauldron!`);
             document.getElementById('readMins').value = '';
         }
 
-        // 💨 Use Time and Trigger Smoke/Drain Animation
         function useTime() {
             checkDailyReset();
             let activeProfile = state.profiles[state.currentActive];
@@ -353,58 +367,13 @@
             }
 
             activeProfile.totalMins -= mins;
+            if (type === "LEGO") activeProfile.legoToday += minutes; // fallback check
             if (type === "LEGO") activeProfile.legoToday += mins;
             if (type === "Pikmin") activeProfile.pikminToday += mins;
             
             addLog(`- Used ${mins}m watching ${type} Video`, 'log-withdraw');
 
-            // ANIMATION FOR WITHDRAWAL START
             let cauldron = document.getElementById('cauldronBody');
             let liquid = document.getElementById('cauldronLiquid');
 
-            // 1. Shake cauldron and turn liquid into vanishing gray smoke
-            cauldron.classList.add('shake');
-            document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.6)'); // Smoke Gray
-            liquid.style.height = "20%"; // Instantly drop level
-
-            setTimeout(() => {
-                cauldron.classList.remove('shake');
-                saveData(); // Final save restores normal level or sets to empty
-            }, 1200);
-
-            alert(`🔮 Portal opened! Enjoy your video time, ${activeProfile.name}.`);
-            document.getElementById('watchMins').value = '';
-        }
-
-        function openParentGate() {
-            let password = prompt("[SECURITY VERIFICATION]\nEnter the 16-digit Headmaster Key to view logs:");
-            if (password === "1979081219800707") {
-                document.getElementById('parentSection').style.display = 'block';
-                document.getElementById('openOfficeBtn').style.display = 'none';
-                renderLogs();
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            } else if (password !== null) {
-                alert("💥 Access Denied! Invalid Key.");
-            }
-        }
-
-        function hideParentSection() {
-            document.getElementById('parentSection').style.display = 'none';
-            document.getElementById('openOfficeBtn').style.display = 'block';
-        }
-
-        function clearLogs() {
-            let activeProfile = state.profiles[state.currentActive];
-            if(confirm(`Do you want to burn all parchment records for ${activeProfile.name}?`)) {
-                activeProfile.logs = [];
-                addLog("Parchment cleared by Headmaster.", "log-system");
-                saveData();
-            }
-        }
-
-        document.getElementById('profileSelector').value = state.currentActive;
-        checkDailyReset();
-        saveData();
-    </script>
-</body>
-</html>
+            cauldron.classList.add('shake

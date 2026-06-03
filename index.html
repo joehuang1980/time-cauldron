@@ -57,10 +57,10 @@
             padding: 8px 20px; border-radius: 20px; font-size: 16px; width: auto; cursor: pointer;
         }
 
-        /* ✨ New 10-Burst Magic Powder Style */
+        /* Magic Powder Particles */
         .magic-powder {
             position: absolute;
-            width: 10px; height: 10px; /* Smaller, sparkling particle sizing */
+            width: 10px; height: 10px;
             border-radius: 50%;
             top: 70px;
             opacity: 0;
@@ -75,7 +75,7 @@
             100% { top: 220px; opacity: 0; transform: scale(0.2) translateX(var(--drift)); }
         }
 
-        /* ⚗️ Cauldron Visual Design */
+        /* Cauldron Visual Design */
         .cauldron-container {
             width: 220px; height: 220px;
             background: radial-gradient(circle at 30% 30%, #374151, #111827);
@@ -91,14 +91,14 @@
             background: #1f2937; border-radius: 50%; z-index: 4;
         }
         
-        /* 🧪 Animated Magic Liquid */
+        /* Animated Magic Liquid */
         .cauldron-liquid {
             position: absolute;
             bottom: 0; left: 0; width: 100%;
             height: 65%; 
             background-color: var(--liquid-color);
             z-index: 1;
-            transition: background-color 0.8s ease, height 1s ease;
+            transition: background-color 0.5s ease, height 0.6s ease;
             box-shadow: inset 0 10px 20px rgba(255,255,255,0.2);
             animation: liquidBreathe 4s ease-in-out infinite;
         }
@@ -216,8 +216,8 @@
     </div>
 
     <script>
-        // Database upgraded to V6 to support dynamic multiple particle architecture
-        let state = JSON.parse(localStorage.getItem('wizardTimeBankV6')) || {
+        // Upgraded to V7 to avoid any old storage corrupted logic
+        let state = JSON.parse(localStorage.getItem('wizardTimeBankV7')) || {
             currentActive: "child1",
             profiles: {
                 child1: { name: "Olivia", totalMins: 0, legoToday: 0, pikminToday: 0, lastDate: new Date().toDateString(), logs: [] },
@@ -239,6 +239,7 @@
 
         function checkDailyReset() {
             let today = new Date().toDateString();
+            let hasReset = false;
             for (let key in state.profiles) {
                 let p = state.profiles[key];
                 if (p.lastDate !== today) {
@@ -248,13 +249,14 @@
                         type: 'log-system'
                     });
                     p.legoToday = 0; p.pikminToday = 0; p.lastDate = today;
+                    hasReset = true;
                 }
             }
-            saveData();
+            if(hasReset) localStorage.setItem('wizardTimeBankV7', JSON.stringify(state));
         }
 
         function saveData() {
-            localStorage.setItem('wizardTimeBankV6', JSON.stringify(state));
+            localStorage.setItem('wizardTimeBankV7', JSON.stringify(state));
             let activeProfile = state.profiles[state.currentActive];
             document.getElementById('balanceDisplay').innerText = Math.floor(activeProfile.totalMins);
             document.getElementById('logTargetName').innerText = activeProfile.name + " Logs";
@@ -287,10 +289,8 @@
             saveData();
         }
 
-        // 🌟 New Core Magic Function: Spawns 10 particles rapidly with random drift and delays
         function spawnPowderBurst(color) {
             let container = document.getElementById('mainContainer');
-            
             for (let i = 0; i < 10; i++) {
                 setTimeout(() => {
                     let particle = document.createElement('div');
@@ -298,22 +298,16 @@
                     particle.style.backgroundColor = color;
                     particle.style.boxShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
                     
-                    // Center the spawn position above the cauldron container horizontally
-                    let centerOffsetX = (Math.random() * 60) - 30; // Spread spawn starting point slightly
+                    let centerOffsetX = (Math.random() * 60) - 30; 
                     particle.style.left = `calc(50% + ${centerOffsetX}px)`;
                     
-                    // Set random left/right drift during fall using CSS variable
                     let randomDrift = (Math.random() * 50) - 25; 
                     particle.style.setProperty('--drift', `${randomDrift}px`);
-                    
-                    // Set a quick fall animation length
                     particle.style.animation = 'dropPowderAnimation 0.7s ease-in forwards';
                     
                     container.appendChild(particle);
-                    
-                    // Clean memory up immediately after completion
                     setTimeout(() => { particle.remove(); }, 700);
-                }, i * 60); // 10 particles staggered every 60 milliseconds (Total duration ~0.6 seconds burst)
+                }, i * 60);
             }
         }
 
@@ -332,20 +326,24 @@
             activeProfile.totalMins += earned;
             addLog(`+ Added ${earned}m (Read ${mins}m of ${bookName})`, 'log-deposit');
 
-            // 🌟 TRIGGER THE 10-POWDER BURST
+            // FIX: Save and render numbers IMMEDIATELY before thread freezes
+            saveData();
+
+            // Run visuals alongside
             spawnPowderBurst(magicColor);
-
-            // Animate liquid rising right when the bulk of powder hits (~0.5 seconds in)
             let liquid = document.getElementById('cauldronLiquid');
-            setTimeout(() => {
-                document.documentElement.style.setProperty('--liquid-color', magicColor + "99"); 
-                liquid.style.height = "78%"; 
-                
-                setTimeout(() => {
-                    saveData();
-                }, 1200);
-            }, 500);
+            document.documentElement.style.setProperty('--liquid-color', magicColor + "99"); 
+            liquid.style.height = "78%"; 
 
+            setTimeout(() => {
+                let currentProfile = state.profiles[state.currentActive];
+                if(currentProfile.totalMins > 0) {
+                    document.documentElement.style.setProperty('--liquid-color', 'rgba(251, 191, 36, 0.3)');
+                    liquid.style.height = "65%";
+                }
+            }, 1600);
+
+            // Pop alert safely now
             alert(`🪄 Success! Added ${earned} minutes to ${activeProfile.name}'s cauldron!`);
             document.getElementById('readMins').value = '';
         }
@@ -367,13 +365,67 @@
             }
 
             activeProfile.totalMins -= mins;
-            if (type === "LEGO") activeProfile.legoToday += minutes; // fallback check
-            if (type === "LEGO") activeProfile.legoToday += mins;
+            if (type === "LEGO") activeProfile.legoToday += mins; // BUG FIXED: changed undefined variable 'minutes' to 'mins'
             if (type === "Pikmin") activeProfile.pikminToday += mins;
             
             addLog(`- Used ${mins}m watching ${type} Video`, 'log-withdraw');
+            
+            // FIX: Save and update numbers IMMEDIATELY
+            saveData();
 
             let cauldron = document.getElementById('cauldronBody');
             let liquid = document.getElementById('cauldronLiquid');
 
-            cauldron.classList.add('shake
+            cauldron.classList.add('shake');
+            document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.6)'); 
+            liquid.style.height = "20%"; 
+
+            setTimeout(() => {
+                cauldron.classList.remove('shake');
+                let currentProfile = state.profiles[state.currentActive];
+                if (currentProfile.totalMins <= 0) {
+                    liquid.style.height = "15%";
+                    document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.2)');
+                } else {
+                    liquid.style.height = "65%";
+                    document.documentElement.style.setProperty('--liquid-color', 'rgba(251, 191, 36, 0.3)');
+                }
+            }, 1200);
+
+            alert(`🔮 Portal opened! Enjoy your video time, ${activeProfile.name}.`);
+            document.getElementById('watchMins').value = '';
+        }
+
+        function openParentGate() {
+            let password = prompt("[SECURITY VERIFICATION]\nEnter the 16-digit Headmaster Key to view logs:");
+            if (password === "1979081219800707") {
+                document.getElementById('parentSection').style.display = 'block';
+                document.getElementById('openOfficeBtn').style.display = 'none';
+                renderLogs();
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            } else if (password !== null) {
+                alert("💥 Access Denied! Invalid Key.");
+            }
+        }
+
+        function hideParentSection() {
+            document.getElementById('parentSection').style.display = 'none';
+            document.getElementById('openOfficeBtn').style.display = 'block';
+        }
+
+        function clearLogs() {
+            let activeProfile = state.profiles[state.currentActive];
+            if(confirm(`Do you want to burn all parchment records for ${activeProfile.name}?`)) {
+                activeProfile.logs = [];
+                addLog("Parchment cleared by Headmaster.", "log-system");
+                saveData();
+            }
+        }
+
+        // Run on start
+        document.getElementById('profileSelector').value = state.currentActive;
+        checkDailyReset();
+        saveData();
+    </script>
+</body>
+</html>

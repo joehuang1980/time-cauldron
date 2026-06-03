@@ -11,6 +11,7 @@
             --wizard-gold: #fbbf24;
             --wizard-maroon: #7f1d1d;
             --paper-bg: #f5f0e1;
+            --liquid-color: rgba(251, 191, 36, 0.3); /* Default Ambient Gold */
         }
         body {
             font-family: 'Georgia', serif;
@@ -25,13 +26,13 @@
             font-size: 18px;
         }
         
-        /* Main responsive wrapper for iPad screen sizes */
         .app-container {
             width: 100%;
-            max-width: 850px; /* Perfect width for iPad portrait & landscape */
+            max-width: 850px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
         h1 {
@@ -41,47 +42,41 @@
             margin: 0 0 5px 0;
             text-align: center;
         }
-        .subtitle { 
-            font-style: italic; 
-            font-size: 16px; 
-            margin-bottom: 25px; 
-            color: #555; 
-        }
+        .subtitle { font-style: italic; font-size: 16px; margin-bottom: 25px; color: #555; }
         
-        /* Profile Selector Styling */
+        /* Profile Selector */
         .profile-card {
-            background: #7f1d1d;
-            color: #fff;
-            border-radius: 35px;
-            padding: 12px 25px;
-            width: 100%;
-            max-width: 380px;
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-            box-sizing: border-box;
+            background: #7f1d1d; color: #fff; border-radius: 35px; padding: 12px 25px;
+            width: 100%; max-width: 380px; margin-bottom: 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15); box-sizing: border-box;
         }
-        .profile-label { 
-            font-weight: bold; 
-            font-size: 16px; 
-            letter-spacing: 1px; 
-        }
+        .profile-label { font-weight: bold; font-size: 16px; letter-spacing: 1px; }
         .profile-select {
-            background: var(--wizard-gold);
-            color: #7f1d1d;
-            font-weight: bold;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 16px;
-            width: auto;
-            margin: 0;
-            cursor: pointer;
+            background: var(--wizard-gold); color: #7f1d1d; font-weight: bold; border: none;
+            padding: 8px 20px; border-radius: 20px; font-size: 16px; width: auto; cursor: pointer;
         }
 
-        /* Cauldron Visual Design */
+        /* 🧙‍♂️ Magic Powder Particle Effect */
+        .magic-powder {
+            position: absolute;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            top: 100px;
+            opacity: 0;
+            z-index: 10;
+            pointer-events: none;
+            filter: blur(2px);
+            box-shadow: 0 0 15px currentColor;
+        }
+        @keyframes dropPowder {
+            0% { top: 80px; opacity: 0; transform: scale(0.5); }
+            20% { opacity: 1; transform: scale(1.2); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { top: 220px; opacity: 0; transform: scale(0.2); }
+        }
+
+        /* ⚗️ Cauldron with Animated Liquid Inside */
         .cauldron-container {
             width: 220px; height: 220px;
             background: radial-gradient(circle at 30% 30%, #374151, #111827);
@@ -90,102 +85,79 @@
             position: relative;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             border: 5px solid #1f2937; margin-bottom: 35px;
+            overflow: hidden; /* Keeps liquid inside */
         }
         .cauldron-container::before {
-            content: ''; position: absolute; top: -12px; width: 200px; height: 24px; background: #1f2937; border-radius: 50%;
-        }
-        .balance-num { 
-            font-size: 70px; 
-            font-weight: bold; 
-            color: var(--wizard-gold); 
-            z-index: 1; 
-            text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
-        }
-        .balance-label { 
-            color: #fff; 
-            font-size: 12px; 
-            font-weight: bold; 
-            z-index: 1; 
-            letter-spacing: 1px;
+            content: ''; position: absolute; top: -2px; width: 210px; height: 20px; 
+            background: #1f2937; border-radius: 50%; z-index: 4;
         }
         
-        /* ✨ iPad Responsive Grid System ✨ */
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr; /* Stacks vertically on phone */
-            gap: 25px;
-            width: 100%;
-            margin-bottom: 20px;
+        /* 🧪 Animated Magic Liquid */
+        .cauldron-liquid {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            height: 65%; /* Liquid fill level */
+            background-color: var(--liquid-color);
+            z-index: 1;
+            transition: background-color 0.8s ease, height 1s ease;
+            box-shadow: inset 0 10px 20px rgba(255,255,255,0.2);
+            animation: liquidBreathe 4s ease-in-out infinite;
         }
         
-        /* When screen width fits iPad/Tablet */
-        @media (min-width: 650px) {
-            .grid-container {
-                grid-template-columns: 1fr 1fr; /* Split into Left & Right columns on iPad */
-            }
+        @keyframes liquidBreathe {
+            0%, 100% { height: 63%; filter: brightness(1); }
+            50% { height: 67%; filter: brightness(1.2); }
+        }
+        
+        /* Magic Flash and Shake Animations */
+        .shake { animation: cauldronShake 0.5s linear infinite; }
+        @keyframes cauldronShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px) rotate(-1deg); }
+            75% { transform: translateX(4px) rotate(1deg); }
         }
 
-        /* Cards and Layout Components */
+        .balance-num { 
+            font-size: 70px; font-weight: bold; color: var(--wizard-gold); 
+            z-index: 3; text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+        .balance-label { color: #fff; font-size: 12px; font-weight: bold; z-index: 3; letter-spacing: 1px; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+        
+        /* iPad Responsive Grid System */
+        .grid-container { display: grid; grid-template-columns: 1fr; gap: 25px; width: 100%; margin-bottom: 20px; }
+        @media (min-width: 650px) { .grid-container { grid-template-columns: 1fr 1fr; } }
+
         .section-card {
-            background: #fff; 
-            border: 2px solid #e5e7eb; 
-            border-radius: 16px;
-            padding: 22px; 
-            box-shadow: 0 6px 12px rgba(0,0,0,0.06); 
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            background: #fff; border: 2px solid #e5e7eb; border-radius: 16px; padding: 22px; 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.06); box-sizing: border-box;
+            display: flex; flex-direction: column; justify-content: space-between;
         }
         h3 { margin-top: 0; color: var(--wizard-maroon); font-size: 22px; margin-bottom: 15px; }
         label { font-size: 15px; font-weight: bold; color: #444; margin-bottom: 4px; display: block; }
         
-        /* Sizing adjustments for inputs and large touch targets */
-        select, input, button { 
-            width: 100%; 
-            padding: 14px; 
-            margin: 6px 0 16px 0; 
-            border-radius: 10px; 
-            border: 1px solid #bbb; 
-            font-size: 17px; 
-            box-sizing: border-box; 
-        }
+        select, input, button { width: 100%; padding: 14px; margin: 6px 0 16px 0; border-radius: 10px; border: 1px solid #bbb; font-size: 17px; box-sizing: border-box; }
         button { 
-            background-color: var(--wizard-maroon); 
-            color: white; 
-            border: none; 
-            font-weight: bold; 
-            cursor: pointer; 
-            font-size: 18px;
-            padding: 15px;
-            box-shadow: 0 4px 6px rgba(127, 29, 29, 0.2);
-            margin-bottom: 0; /* Align perfectly */
+            background-color: var(--wizard-maroon); color: white; border: none; font-weight: bold; cursor: pointer; font-size: 18px; padding: 15px;
+            box-shadow: 0 4px 6px rgba(127, 29, 29, 0.2); margin-bottom: 0;
         }
         button:active { background-color: #b91c1c; transform: scale(0.99); }
         .btn-gold { background-color: #b45309; box-shadow: 0 4px 6px rgba(180, 83, 9, 0.2); }
         .btn-gold:active { background-color: #d97706; }
         
         .parent-btn { background: none; color: #777; font-size: 14px; text-decoration: underline; margin-top: 20px; border: none; box-shadow: none; padding: 5px; width: auto;}
-        
-        /* Parchment Log Styles */
-        .log-box {
-            background-color: #fefcf6; border: 1px dashed #b45309; border-radius: 8px;
-            padding: 12px; max-height: 250px; overflow-y: auto; font-size: 14px; font-family: monospace;
-        }
+        .log-box { background-color: #fefcf6; border: 1px dashed #b45309; border-radius: 8px; padding: 12px; max-height: 250px; overflow-y: auto; font-size: 14px; font-family: monospace; }
         .log-entry { margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 6px; }
         .log-deposit { color: green; font-weight: bold; }
         .log-withdraw { color: red; font-weight: bold; }
         .log-system { color: blue; font-style: italic; }
-        
-        /* Full width card for parent logs under the grid */
-        .full-width-card {
-            width: 100%;
-        }
+        .full-width-card { width: 100%; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
+        <div class="magic-powder" id="magicPowder"></div>
+
         <h1>THE TIME CAULDRON</h1>
         <div class="subtitle">"Your reading turns into magic time!"</div>
 
@@ -197,7 +169,8 @@
             </select>
         </div>
 
-        <div class="cauldron-container">
+        <div class="cauldron-container" id="cauldronBody">
+            <div class="cauldron-liquid" id="cauldronLiquid"></div>
             <div class="balance-num" id="balanceDisplay">0</div>
             <div class="balance-label">MINUTES LEFT</div>
         </div>
@@ -209,10 +182,10 @@
                     <h3>📜 Pour Reading Time</h3>
                     <label for="bookType">Choose your book type:</label>
                     <select id="bookType">
-                        <option value="1.0" data-name="Magazine">Magazine (Rate 1:1)</option>
-                        <option value="1.5" data-name="Chinese Short Book">Chinese Short Book (Rate 1:1.5)</option>
-                        <option value="1.8" data-name="English Short Book">English Short Book (Rate 1:1.8)</option>
-                        <option value="2.0" data-name="English Long Novel">English Long Novel (Rate 1:2.0) 🌟</option>
+                        <option value="1.0" data-name="Magazine" data-color="#10b981">Magazine (Rate 1:1) 🟢</option>
+                        <option value="1.5" data-name="Chinese Short Book" data-color="#a855f7">Chinese Short Book (Rate 1:1.5) 🟣</option>
+                        <option value="1.8" data-name="English Short Book" data-color="#3b82f6">English Short Book (Rate 1:1.8) 🔵</option>
+                        <option value="2.0" data-name="English Long Novel" data-color="#fbbf24">English Long Novel (Rate 1:2.0) 🟡</option>
                     </select>
                     <label for="readMins">How many minutes did you read?</label>
                     <input type="number" id="readMins" placeholder="Enter minutes here" min="1">
@@ -248,7 +221,8 @@
     </div>
 
     <script>
-        let state = JSON.parse(localStorage.getItem('wizardTimeBankV4')) || {
+        // Database upgraded to V5 to hold new styling architecture
+        let state = JSON.parse(localStorage.getItem('wizardTimeBankV5')) || {
             currentActive: "child1",
             profiles: {
                 child1: { name: "Olivia", totalMins: 0, legoToday: 0, pikminToday: 0, lastDate: new Date().toDateString(), logs: [] },
@@ -278,19 +252,26 @@
                         text: `System reset daily limits. (Prev LEGO:${p.legoToday}m, Pikmin:${p.pikminToday}m)`,
                         type: 'log-system'
                     });
-                    p.legoToday = 0;
-                    p.pikminToday = 0;
-                    p.lastDate = today;
+                    p.legoToday = 0; p.pikminToday = 0; p.lastDate = today;
                 }
             }
             saveData();
         }
 
         function saveData() {
-            localStorage.setItem('wizardTimeBankV4', JSON.stringify(state));
+            localStorage.setItem('wizardTimeBankV5', JSON.stringify(state));
             let activeProfile = state.profiles[state.currentActive];
             document.getElementById('balanceDisplay').innerText = Math.floor(activeProfile.totalMins);
             document.getElementById('logTargetName').innerText = activeProfile.name + " Logs";
+            
+            // Adjust baseline liquid fill depending on empty or full cauldron
+            let liquidEl = document.getElementById('cauldronLiquid');
+            if (activeProfile.totalMins <= 0) {
+                liquidEl.style.height = "15%"; // Almost empty mud
+                document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.2)');
+            } else {
+                liquidEl.style.height = "65%";
+            }
             renderLogs();
         }
 
@@ -312,12 +293,14 @@
             saveData();
         }
 
+        // 🟢🟣🔵🟡 Add Time and Trigger Powder/Glow Magic Animation
         function addTime() {
             checkDailyReset();
             let activeProfile = state.profiles[state.currentActive];
             let select = document.getElementById('bookType');
             let rate = parseFloat(select.value);
             let bookName = select.options[select.selectedIndex].getAttribute('data-name');
+            let magicColor = select.options[select.selectedIndex].getAttribute('data-color');
             let mins = parseFloat(document.getElementById('readMins').value);
             
             if (!mins || mins <= 0) { alert("Please enter valid minutes!"); return; }
@@ -325,11 +308,34 @@
             let earned = mins * rate;
             activeProfile.totalMins += earned;
             addLog(`+ Added ${earned}m (Read ${mins}m of ${bookName})`, 'log-deposit');
-            saveData();
+
+            // ANIMATION MAGIC START
+            let powder = document.getElementById('magicPowder');
+            let liquid = document.getElementById('cauldronLiquid');
+            
+            // 1. Drop colored powder
+            powder.style.color = magicColor;
+            powder.style.backgroundColor = magicColor;
+            powder.style.animation = 'none';
+            powder.offsetHeight; // Trigger reflow to restart animation
+            powder.style.animation = 'dropPowder 1.2s ease-in forwards';
+
+            // 2. Change liquid to magic color when powder hits it (after 0.8s)
+            setTimeout(() => {
+                document.documentElement.style.setProperty('--liquid-color', magicColor + "99"); // Add alpha opacity
+                liquid.style.height = "75%"; // Surge up dynamically!
+                
+                // Return to default warm ambiance after animation finishes
+                setTimeout(() => {
+                    saveData();
+                }, 1500);
+            }, 800);
+
             alert(`🪄 Success! Added ${earned} minutes to ${activeProfile.name}'s cauldron!`);
             document.getElementById('readMins').value = '';
         }
 
+        // 💨 Use Time and Trigger Smoke/Drain Animation
         function useTime() {
             checkDailyReset();
             let activeProfile = state.profiles[state.currentActive];
@@ -351,20 +357,31 @@
             if (type === "Pikmin") activeProfile.pikminToday += mins;
             
             addLog(`- Used ${mins}m watching ${type} Video`, 'log-withdraw');
-            saveData();
+
+            // ANIMATION FOR WITHDRAWAL START
+            let cauldron = document.getElementById('cauldronBody');
+            let liquid = document.getElementById('cauldronLiquid');
+
+            // 1. Shake cauldron and turn liquid into vanishing gray smoke
+            cauldron.classList.add('shake');
+            document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.6)'); // Smoke Gray
+            liquid.style.height = "20%"; // Instantly drop level
+
+            setTimeout(() => {
+                cauldron.classList.remove('shake');
+                saveData(); // Final save restores normal level or sets to empty
+            }, 1200);
+
             alert(`🔮 Portal opened! Enjoy your video time, ${activeProfile.name}.`);
             document.getElementById('watchMins').value = '';
         }
 
-        // 🔒 16-digit Headmaster Key
         function openParentGate() {
             let password = prompt("[SECURITY VERIFICATION]\nEnter the 16-digit Headmaster Key to view logs:");
-            
             if (password === "1979081219800707") {
                 document.getElementById('parentSection').style.display = 'block';
                 document.getElementById('openOfficeBtn').style.display = 'none';
                 renderLogs();
-                // Smooth scroll to view logs
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             } else if (password !== null) {
                 alert("💥 Access Denied! Invalid Key.");

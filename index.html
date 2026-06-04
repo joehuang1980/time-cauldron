@@ -27,21 +27,10 @@
         }
         
         .app-container {
-            width: 100%;
-            max-width: 850px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
+            width: 100%; max-width: 850px; display: flex; flex-direction: column; align-items: center; position: relative;
         }
 
-        h1 {
-            color: var(--wizard-maroon);
-            letter-spacing: 2px;
-            font-size: 36px;
-            margin: 0 0 5px 0;
-            text-align: center;
-        }
+        h1 { color: var(--wizard-maroon); letter-spacing: 2px; font-size: 36px; margin: 0 0 5px 0; text-align: center; }
         .subtitle { font-style: italic; font-size: 16px; margin-bottom: 25px; color: #555; }
         
         /* Profile Selector */
@@ -59,14 +48,8 @@
 
         /* Magic Powder Particles */
         .magic-powder {
-            position: absolute;
-            width: 10px; height: 10px;
-            border-radius: 50%;
-            top: 70px;
-            opacity: 0;
-            z-index: 10;
-            pointer-events: none;
-            filter: blur(1px);
+            position: absolute; width: 10px; height: 10px; border-radius: 50%;
+            top: 70px; opacity: 0; z-index: 10; pointer-events: none; filter: blur(1px);
         }
         @keyframes dropPowderAnimation {
             0% { top: 70px; opacity: 0; transform: scale(0.4) translateX(0); }
@@ -77,14 +60,10 @@
 
         /* Cauldron Visual Design */
         .cauldron-container {
-            width: 220px; height: 220px;
-            background: radial-gradient(circle at 30% 30%, #374151, #111827);
-            border-radius: 60px 60px 110px 110px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-            position: relative;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border: 5px solid #1f2937; margin-bottom: 35px;
-            overflow: hidden;
+            width: 220px; height: 220px; background: radial-gradient(circle at 30% 30%, #374151, #111827);
+            border-radius: 60px 60px 110px 110px; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+            position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border: 5px solid #1f2937; margin-bottom: 35px; overflow: hidden;
         }
         .cauldron-container::before {
             content: ''; position: absolute; top: -2px; width: 210px; height: 20px; 
@@ -93,11 +72,8 @@
         
         /* Animated Magic Liquid */
         .cauldron-liquid {
-            position: absolute;
-            bottom: 0; left: 0; width: 100%;
-            height: 65%; 
-            background-color: var(--liquid-color);
-            z-index: 1;
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 65%; 
+            background-color: var(--liquid-color); z-index: 1;
             transition: background-color 0.5s ease, height 0.6s ease;
             box-shadow: inset 0 10px 20px rgba(255,255,255,0.2);
             animation: liquidBreathe 4s ease-in-out infinite;
@@ -135,9 +111,10 @@
         select, input, button { width: 100%; padding: 14px; margin: 6px 0 16px 0; border-radius: 10px; border: 1px solid #bbb; font-size: 17px; box-sizing: border-box; }
         button { 
             background-color: var(--wizard-maroon); color: white; border: none; font-weight: bold; cursor: pointer; font-size: 18px; padding: 15px;
-            box-shadow: 0 4px 6px rgba(127, 29, 29, 0.2); margin-bottom: 0;
+            box-shadow: 0 4px 6px rgba(127, 29, 29, 0.2); margin-bottom: 0; transition: background 0.3s, opacity 0.3s;
         }
         button:active { background-color: #b91c1c; transform: scale(0.99); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; } /* Style for disabled state */
         .btn-gold { background-color: #b45309; box-shadow: 0 4px 6px rgba(180, 83, 9, 0.2); }
         .btn-gold:active { background-color: #d97706; }
         
@@ -179,13 +156,14 @@
                     <select id="bookType">
                         <option value="1.0" data-name="Magazine" data-color="#10b981">Magazine (Rate 1:1) 🟢</option>
                         <option value="1.5" data-name="Chinese Short Book" data-color="#a855f7">Chinese Short Book (Rate 1:1.5) 🟣</option>
-                        <option value="1.8" data-name="English Short Book" data-color="#3b82f6">English Short Book (Rate 1:1.8) 🔵</option>
+                        <option value="1.9" data-name="Chinese Long Book" data-color="#f97316">Chinese Long Book (Rate 1:1.9) 🟠</option>
+                        <option value="1.75" data-name="English Short Book" data-color="#3b82f6">English Short Book (Rate 1:1.75) 🔵</option>
                         <option value="2.0" data-name="English Long Novel" data-color="#fbbf24">English Long Novel (Rate 1:2.0) 🟡</option>
                     </select>
                     <label for="readMins">How many minutes did you read?</label>
                     <input type="number" id="readMins" placeholder="Enter minutes here" min="1">
                 </div>
-                <button onclick="addTime()">Cast Reading Spell!</button>
+                <button id="addTimeBtn" onclick="addTime()">Cast Reading Spell!</button>
             </div>
 
             <div class="section-card">
@@ -200,7 +178,7 @@
                     <label for="watchMins">How many minutes will you watch?</label>
                     <input type="number" id="watchMins" placeholder="Enter minutes here" min="1">
                 </div>
-                <button class="btn-gold" onclick="useTime()">Open Video Portal</button>
+                <button id="useTimeBtn" class="btn-gold" onclick="useTime()">Open Video Portal</button>
             </div>
             
         </div>
@@ -216,8 +194,8 @@
     </div>
 
     <script>
-        // Upgraded to V7 to avoid any old storage corrupted logic
-        let state = JSON.parse(localStorage.getItem('wizardTimeBankV7')) || {
+        // Database upgraded to V9 to apply math precision fixes and fresh limits
+        let state = JSON.parse(localStorage.getItem('wizardTimeBankV9')) || {
             currentActive: "child1",
             profiles: {
                 child1: { name: "Olivia", totalMins: 0, legoToday: 0, pikminToday: 0, lastDate: new Date().toDateString(), logs: [] },
@@ -252,12 +230,13 @@
                     hasReset = true;
                 }
             }
-            if(hasReset) localStorage.setItem('wizardTimeBankV7', JSON.stringify(state));
+            if(hasReset) localStorage.setItem('wizardTimeBankV9', JSON.stringify(state));
         }
 
         function saveData() {
-            localStorage.setItem('wizardTimeBankV7', JSON.stringify(state));
+            localStorage.setItem('wizardTimeBankV9', JSON.stringify(state));
             let activeProfile = state.profiles[state.currentActive];
+            // Display floor so kids don't think they have a full minute until they actually do
             document.getElementById('balanceDisplay').innerText = Math.floor(activeProfile.totalMins);
             document.getElementById('logTargetName').innerText = activeProfile.name + " Logs";
             
@@ -313,6 +292,7 @@
 
         function addTime() {
             checkDailyReset();
+            let btn = document.getElementById('addTimeBtn');
             let activeProfile = state.profiles[state.currentActive];
             let select = document.getElementById('bookType');
             let rate = parseFloat(select.value);
@@ -322,15 +302,18 @@
             
             if (!mins || mins <= 0) { alert("Please enter valid minutes!"); return; }
 
-            let earned = mins * rate;
+            // Double Click Prevention
+            btn.disabled = true;
+            btn.innerText = "Casting...";
+
+            // Math Precision Fix (Rounds to 2 decimal places to avoid 17.500000004)
+            let earned = Math.round((mins * rate) * 100) / 100;
             activeProfile.totalMins += earned;
             addLog(`+ Added ${earned}m (Read ${mins}m of ${bookName})`, 'log-deposit');
 
-            // FIX: Save and render numbers IMMEDIATELY before thread freezes
             saveData();
-
-            // Run visuals alongside
             spawnPowderBurst(magicColor);
+            
             let liquid = document.getElementById('cauldronLiquid');
             document.documentElement.style.setProperty('--liquid-color', magicColor + "99"); 
             liquid.style.height = "78%"; 
@@ -343,13 +326,18 @@
                 }
             }, 1600);
 
-            // Pop alert safely now
-            alert(`🪄 Success! Added ${earned} minutes to ${activeProfile.name}'s cauldron!`);
-            document.getElementById('readMins').value = '';
+            // Delay Alert so Safari doesn't freeze the animation
+            setTimeout(() => {
+                alert(`🪄 Success! Added ${earned} minutes to ${activeProfile.name}'s cauldron!`);
+                document.getElementById('readMins').value = '';
+                btn.disabled = false;
+                btn.innerText = "Cast Reading Spell!";
+            }, 800);
         }
 
         function useTime() {
             checkDailyReset();
+            let btn = document.getElementById('useTimeBtn');
             let activeProfile = state.profiles[state.currentActive];
             let type = document.getElementById('videoType').value;
             let mins = parseFloat(document.getElementById('watchMins').value);
@@ -364,13 +352,16 @@
                 alert(`❌ Too much Pikmin today! You can only watch ${25 - activeProfile.pikminToday} more minutes.`); return;
             }
 
+            // Double Click Prevention
+            btn.disabled = true;
+            btn.innerText = "Opening...";
+
             activeProfile.totalMins -= mins;
-            if (type === "LEGO") activeProfile.legoToday += mins; // BUG FIXED: changed undefined variable 'minutes' to 'mins'
+            if (type === "LEGO") activeProfile.legoToday += mins;
             if (type === "Pikmin") activeProfile.pikminToday += mins;
             
             addLog(`- Used ${mins}m watching ${type} Video`, 'log-withdraw');
             
-            // FIX: Save and update numbers IMMEDIATELY
             saveData();
 
             let cauldron = document.getElementById('cauldronBody');
@@ -392,8 +383,13 @@
                 }
             }, 1200);
 
-            alert(`🔮 Portal opened! Enjoy your video time, ${activeProfile.name}.`);
-            document.getElementById('watchMins').value = '';
+            // Delay Alert so Safari doesn't freeze the animation
+            setTimeout(() => {
+                alert(`🔮 Portal opened! Enjoy your video time, ${activeProfile.name}.`);
+                document.getElementById('watchMins').value = '';
+                btn.disabled = false;
+                btn.innerText = "Open Video Portal";
+            }, 800);
         }
 
         function openParentGate() {

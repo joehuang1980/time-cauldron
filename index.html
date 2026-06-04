@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Time Cauldron</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -11,33 +11,21 @@
             --wizard-gold: #fbbf24;
             --wizard-maroon: #7f1d1d;
             --paper-bg: #f5f0e1;
-            --liquid-color: rgba(251, 191, 36, 0.3); /* Default Ambient Gold */
+            --liquid-color: rgba(251, 191, 36, 0.3);
         }
         body {
-            font-family: 'Georgia', serif;
-            background-color: var(--paper-bg);
-            color: #2d1e10;
-            margin: 0;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            user-select: none;
-            font-size: 18px;
+            font-family: 'Georgia', serif; background-color: var(--paper-bg); color: #2d1e10;
+            margin: 0; padding: 30px 20px; display: flex; flex-direction: column; align-items: center;
+            user-select: none; font-size: 18px; touch-action: manipulation; /* 增強觸控穩定性 */
         }
         
-        .app-container {
-            width: 100%; max-width: 850px; display: flex; flex-direction: column; align-items: center; position: relative;
-        }
-
+        .app-container { width: 100%; max-width: 850px; display: flex; flex-direction: column; align-items: center; position: relative; }
         h1 { color: var(--wizard-maroon); letter-spacing: 2px; font-size: 36px; margin: 0 0 5px 0; text-align: center; }
         .subtitle { font-style: italic; font-size: 16px; margin-bottom: 25px; color: #555; }
         
-        /* Profile Selector */
         .profile-card {
             background: #7f1d1d; color: #fff; border-radius: 35px; padding: 12px 25px;
-            width: 100%; max-width: 380px; margin-bottom: 25px;
-            display: flex; justify-content: space-between; align-items: center;
+            width: 100%; max-width: 380px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 6px 12px rgba(0,0,0,0.15); box-sizing: border-box;
         }
         .profile-label { font-weight: bold; font-size: 16px; letter-spacing: 1px; }
@@ -46,7 +34,6 @@
             padding: 8px 20px; border-radius: 20px; font-size: 16px; width: auto; cursor: pointer;
         }
 
-        /* Magic Powder Particles */
         .magic-powder {
             position: absolute; width: 10px; height: 10px; border-radius: 50%;
             top: 70px; opacity: 0; z-index: 10; pointer-events: none; filter: blur(1px);
@@ -58,7 +45,6 @@
             100% { top: 220px; opacity: 0; transform: scale(0.2) translateX(var(--drift)); }
         }
 
-        /* Cauldron Visual Design */
         .cauldron-container {
             width: 220px; height: 220px; background: radial-gradient(circle at 30% 30%, #374151, #111827);
             border-radius: 60px 60px 110px 110px; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
@@ -70,12 +56,10 @@
             background: #1f2937; border-radius: 50%; z-index: 4;
         }
         
-        /* Animated Magic Liquid */
         .cauldron-liquid {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 65%; 
             background-color: var(--liquid-color); z-index: 1;
-            transition: background-color 0.5s ease, height 0.6s ease;
-            box-shadow: inset 0 10px 20px rgba(255,255,255,0.2);
+            transition: background-color 0.5s ease, height 0.6s ease; box-shadow: inset 0 10px 20px rgba(255,255,255,0.2);
             animation: liquidBreathe 4s ease-in-out infinite;
         }
         @keyframes liquidBreathe {
@@ -90,20 +74,15 @@
             75% { transform: translateX(4px) rotate(1deg); }
         }
 
-        .balance-num { 
-            font-size: 70px; font-weight: bold; color: var(--wizard-gold); 
-            z-index: 3; text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-        }
+        .balance-num { font-size: 70px; font-weight: bold; color: var(--wizard-gold); z-index: 3; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
         .balance-label { color: #fff; font-size: 12px; font-weight: bold; z-index: 3; letter-spacing: 1px; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
         
-        /* iPad Responsive Grid System */
         .grid-container { display: grid; grid-template-columns: 1fr; gap: 25px; width: 100%; margin-bottom: 20px; }
         @media (min-width: 650px) { .grid-container { grid-template-columns: 1fr 1fr; } }
 
         .section-card {
             background: #fff; border: 2px solid #e5e7eb; border-radius: 16px; padding: 22px; 
-            box-shadow: 0 6px 12px rgba(0,0,0,0.06); box-sizing: border-box;
-            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.06); box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;
         }
         h3 { margin-top: 0; color: var(--wizard-maroon); font-size: 22px; margin-bottom: 15px; }
         label { font-size: 15px; font-weight: bold; color: #444; margin-bottom: 4px; display: block; }
@@ -114,7 +93,7 @@
             box-shadow: 0 4px 6px rgba(127, 29, 29, 0.2); margin-bottom: 0; transition: background 0.3s, opacity 0.3s;
         }
         button:active { background-color: #b91c1c; transform: scale(0.99); }
-        button:disabled { opacity: 0.6; cursor: not-allowed; } /* Style for disabled state */
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-gold { background-color: #b45309; box-shadow: 0 4px 6px rgba(180, 83, 9, 0.2); }
         .btn-gold:active { background-color: #d97706; }
         
@@ -125,6 +104,14 @@
         .log-withdraw { color: red; font-weight: bold; }
         .log-system { color: blue; font-style: italic; }
         .full-width-card { width: 100%; }
+        
+        .fix-entry-box { background: #fdf2f8; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 2px dashed #fbcfe8; }
+        .fix-entry-box label { font-size: 15px; color: #831843; margin-bottom: 10px; }
+        .fix-controls { display: flex; gap: 10px; align-items: center; }
+        .fix-controls input { margin: 0; flex: 1; border-color: #fbcfe8; font-size: 16px; }
+        .fix-controls button { margin: 0; width: 60px; font-size: 24px; padding: 5px 0; border-radius: 8px; }
+        .btn-add { background: #10b981; } .btn-add:active { background: #059669; }
+        .btn-sub { background: #ef4444; } .btn-sub:active { background: #dc2626; }
     </style>
 </head>
 <body>
@@ -148,7 +135,6 @@
         </div>
 
         <div class="grid-container">
-            
             <div class="section-card">
                 <div>
                     <h3>📜 Pour Reading Time</h3>
@@ -161,7 +147,7 @@
                         <option value="2.0" data-name="English Long Novel" data-color="#fbbf24">English Long Novel (Rate 1:2.0) 🟡</option>
                     </select>
                     <label for="readMins">How many minutes did you read?</label>
-                    <input type="number" id="readMins" placeholder="Enter minutes here" min="1">
+                    <input type="number" id="readMins" placeholder="Enter minutes here" min="1" step="1">
                 </div>
                 <button id="addTimeBtn" onclick="addTime()">Cast Reading Spell!</button>
             </div>
@@ -176,17 +162,26 @@
                         <option value="Other">Other Videos</option>
                     </select>
                     <label for="watchMins">How many minutes will you watch?</label>
-                    <input type="number" id="watchMins" placeholder="Enter minutes here" min="1">
+                    <input type="number" id="watchMins" placeholder="Enter minutes here" min="1" step="1">
                 </div>
                 <button id="useTimeBtn" class="btn-gold" onclick="useTime()">Open Video Portal</button>
             </div>
-            
         </div>
 
         <div class="section-card full-width-card" id="parentSection" style="display: none;">
             <h3>🔑 Headmaster's Parchment (<span id="logTargetName">Logs</span>)</h3>
+            
+            <div class="fix-entry-box">
+                <label>🪄 Fix Wrong Entry (Add or Subtract Time):</label>
+                <div class="fix-controls">
+                    <input type="number" id="adjustMins" placeholder="e.g. 15" min="1" step="1">
+                    <button class="btn-add" onclick="manualAdjust('+')">＋</button>
+                    <button class="btn-sub" onclick="manualAdjust('-')">－</button>
+                </div>
+            </div>
+
             <div class="log-box" id="logContainer"></div>
-            <button style="background: #4b5563; margin-top: 15px;" onclick="clearLogs()">Clear Current Logs</button>
+            <button style="background: #4b5563; margin-top: 15px;" onclick="clearLogs()">Clear Text Logs Only</button>
             <button style="background: #9ca3af; margin-top: 5px;" onclick="hideParentSection()">Lock Office</button>
         </div>
 
@@ -194,8 +189,7 @@
     </div>
 
     <script>
-        // Database upgraded to V9 to apply math precision fixes and fresh limits
-        let state = JSON.parse(localStorage.getItem('wizardTimeBankV9')) || {
+        let state = JSON.parse(localStorage.getItem('wizardTimeBankV11')) || {
             currentActive: "child1",
             profiles: {
                 child1: { name: "Olivia", totalMins: 0, legoToday: 0, pikminToday: 0, lastDate: new Date().toDateString(), logs: [] },
@@ -221,22 +215,16 @@
             for (let key in state.profiles) {
                 let p = state.profiles[key];
                 if (p.lastDate !== today) {
-                    p.logs.unshift({
-                        time: getTimestamp(),
-                        text: `System reset daily limits. (Prev LEGO:${p.legoToday}m, Pikmin:${p.pikminToday}m)`,
-                        type: 'log-system'
-                    });
-                    p.legoToday = 0; p.pikminToday = 0; p.lastDate = today;
-                    hasReset = true;
+                    p.logs.unshift({ time: getTimestamp(), text: `System reset daily limits. (Prev LEGO:${p.legoToday}m, Pikmin:${p.pikminToday}m)`, type: 'log-system' });
+                    p.legoToday = 0; p.pikminToday = 0; p.lastDate = today; hasReset = true;
                 }
             }
-            if(hasReset) localStorage.setItem('wizardTimeBankV9', JSON.stringify(state));
+            if(hasReset) localStorage.setItem('wizardTimeBankV11', JSON.stringify(state));
         }
 
         function saveData() {
-            localStorage.setItem('wizardTimeBankV9', JSON.stringify(state));
+            localStorage.setItem('wizardTimeBankV11', JSON.stringify(state));
             let activeProfile = state.profiles[state.currentActive];
-            // Display floor so kids don't think they have a full minute until they actually do
             document.getElementById('balanceDisplay').innerText = Math.floor(activeProfile.totalMins);
             document.getElementById('logTargetName').innerText = activeProfile.name + " Logs";
             
@@ -246,6 +234,8 @@
                 document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.2)');
             } else {
                 liquidEl.style.height = "65%";
+                // 🌟 FIX: Force restore the magical gold color when switching to a profile with > 0 balance
+                document.documentElement.style.setProperty('--liquid-color', 'rgba(251, 191, 36, 0.3)');
             }
             renderLogs();
         }
@@ -257,14 +247,12 @@
                 container.innerHTML = '<div style="color:#999; text-align:center;">No magic logs yet.</div>';
                 return;
             }
-            container.innerHTML = activeProfile.logs.map(log => 
-                `<div class="log-entry ${log.type}">[${log.time}] ${log.text}</div>`
-            ).join('');
+            container.innerHTML = activeProfile.logs.map(log => `<div class="log-entry ${log.type}">[${log.time}] ${log.text}</div>`).join('');
         }
 
         function changeProfile() {
-            state.currentActive = document.getElementById('profileSelector').value;
-            checkDailyReset();
+            state.currentActive = document.getElementById('profileSelector').value; 
+            checkDailyReset(); 
             saveData();
         }
 
@@ -272,156 +260,118 @@
             let container = document.getElementById('mainContainer');
             for (let i = 0; i < 10; i++) {
                 setTimeout(() => {
-                    let particle = document.createElement('div');
-                    particle.className = 'magic-powder';
-                    particle.style.backgroundColor = color;
-                    particle.style.boxShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
-                    
-                    let centerOffsetX = (Math.random() * 60) - 30; 
-                    particle.style.left = `calc(50% + ${centerOffsetX}px)`;
-                    
-                    let randomDrift = (Math.random() * 50) - 25; 
-                    particle.style.setProperty('--drift', `${randomDrift}px`);
+                    let particle = document.createElement('div'); particle.className = 'magic-powder';
+                    particle.style.backgroundColor = color; particle.style.boxShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
+                    let centerOffsetX = (Math.random() * 60) - 30; particle.style.left = `calc(50% + ${centerOffsetX}px)`;
+                    let randomDrift = (Math.random() * 50) - 25; particle.style.setProperty('--drift', `${randomDrift}px`);
                     particle.style.animation = 'dropPowderAnimation 0.7s ease-in forwards';
-                    
-                    container.appendChild(particle);
-                    setTimeout(() => { particle.remove(); }, 700);
+                    container.appendChild(particle); setTimeout(() => { particle.remove(); }, 700);
                 }, i * 60);
             }
         }
 
         function addTime() {
             checkDailyReset();
-            let btn = document.getElementById('addTimeBtn');
-            let activeProfile = state.profiles[state.currentActive];
-            let select = document.getElementById('bookType');
-            let rate = parseFloat(select.value);
-            let bookName = select.options[select.selectedIndex].getAttribute('data-name');
-            let magicColor = select.options[select.selectedIndex].getAttribute('data-color');
-            let mins = parseFloat(document.getElementById('readMins').value);
+            let btn = document.getElementById('addTimeBtn'); let activeProfile = state.profiles[state.currentActive];
+            let select = document.getElementById('bookType'); let rate = parseFloat(select.value);
+            let bookName = select.options[select.selectedIndex].getAttribute('data-name'); let magicColor = select.options[select.selectedIndex].getAttribute('data-color');
+            let mins = Math.floor(parseFloat(document.getElementById('readMins').value));
             
-            if (!mins || mins <= 0) { alert("Please enter valid minutes!"); return; }
+            if (!mins || mins <= 0 || isNaN(mins)) { alert("Please enter valid whole minutes!"); return; }
 
-            // Double Click Prevention
-            btn.disabled = true;
-            btn.innerText = "Casting...";
-
-            // Math Precision Fix (Rounds to 2 decimal places to avoid 17.500000004)
+            btn.disabled = true; btn.innerText = "Casting...";
             let earned = Math.round((mins * rate) * 100) / 100;
             activeProfile.totalMins += earned;
             addLog(`+ Added ${earned}m (Read ${mins}m of ${bookName})`, 'log-deposit');
-
-            saveData();
-            spawnPowderBurst(magicColor);
+            saveData(); spawnPowderBurst(magicColor);
             
             let liquid = document.getElementById('cauldronLiquid');
-            document.documentElement.style.setProperty('--liquid-color', magicColor + "99"); 
-            liquid.style.height = "78%"; 
+            document.documentElement.style.setProperty('--liquid-color', magicColor + "99"); liquid.style.height = "78%"; 
 
             setTimeout(() => {
                 let currentProfile = state.profiles[state.currentActive];
-                if(currentProfile.totalMins > 0) {
-                    document.documentElement.style.setProperty('--liquid-color', 'rgba(251, 191, 36, 0.3)');
-                    liquid.style.height = "65%";
-                }
+                if(currentProfile.totalMins > 0) { document.documentElement.style.setProperty('--liquid-color', 'rgba(251, 191, 36, 0.3)'); liquid.style.height = "65%"; }
             }, 1600);
 
-            // Delay Alert so Safari doesn't freeze the animation
             setTimeout(() => {
                 alert(`🪄 Success! Added ${earned} minutes to ${activeProfile.name}'s cauldron!`);
-                document.getElementById('readMins').value = '';
-                btn.disabled = false;
-                btn.innerText = "Cast Reading Spell!";
+                document.getElementById('readMins').value = ''; btn.disabled = false; btn.innerText = "Cast Reading Spell!";
             }, 800);
         }
 
         function useTime() {
             checkDailyReset();
-            let btn = document.getElementById('useTimeBtn');
-            let activeProfile = state.profiles[state.currentActive];
-            let type = document.getElementById('videoType').value;
-            let mins = parseFloat(document.getElementById('watchMins').value);
+            let btn = document.getElementById('useTimeBtn'); let activeProfile = state.profiles[state.currentActive];
+            let type = document.getElementById('videoType'); let mins = Math.floor(parseFloat(document.getElementById('watchMins').value));
             
-            if (!mins || mins <= 0) { alert("Please enter valid minutes!"); return; }
+            if (!mins || mins <= 0 || isNaN(mins)) { alert("Please enter valid whole minutes!"); return; }
             if (mins > activeProfile.totalMins) { alert("❌ Not enough magic time! Go read some books!"); return; }
+            if (type === "LEGO" && (activeProfile.legoToday + mins > 45)) { alert(`❌ Too much LEGO today! You can only watch ${45 - activeProfile.legoToday} more minutes.`); return; }
+            if (type === "Pikmin" && (activeProfile.pikminToday + mins > 25)) { alert(`❌ Too much Pikmin today! You can only watch ${25 - activeProfile.pikminToday} more minutes.`); return; }
 
-            if (type === "LEGO" && (activeProfile.legoToday + mins > 45)) {
-                alert(`❌ Too much LEGO today! You can only watch ${45 - activeProfile.legoToday} more minutes.`); return;
-            }
-            if (type === "Pikmin" && (activeProfile.pikminToday + mins > 25)) {
-                alert(`❌ Too much Pikmin today! You can only watch ${25 - activeProfile.pikminToday} more minutes.`); return;
-            }
-
-            // Double Click Prevention
-            btn.disabled = true;
-            btn.innerText = "Opening...";
-
+            btn.disabled = true; btn.innerText = "Opening...";
             activeProfile.totalMins -= mins;
-            if (type === "LEGO") activeProfile.legoToday += mins;
-            if (type === "Pikmin") activeProfile.pikminToday += mins;
-            
+            if (type === "LEGO") activeProfile.legoToday += mins; if (type === "Pikmin") activeProfile.pikminToday += mins;
             addLog(`- Used ${mins}m watching ${type} Video`, 'log-withdraw');
-            
             saveData();
 
-            let cauldron = document.getElementById('cauldronBody');
-            let liquid = document.getElementById('cauldronLiquid');
-
-            cauldron.classList.add('shake');
-            document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.6)'); 
-            liquid.style.height = "20%"; 
+            let cauldron = document.getElementById('cauldronBody'); let liquid = document.getElementById('cauldronLiquid');
+            cauldron.classList.add('shake'); document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.6)'); liquid.style.height = "20%"; 
 
             setTimeout(() => {
-                cauldron.classList.remove('shake');
-                let currentProfile = state.profiles[state.currentActive];
-                if (currentProfile.totalMins <= 0) {
-                    liquid.style.height = "15%";
-                    document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.2)');
-                } else {
-                    liquid.style.height = "65%";
-                    document.documentElement.style.setProperty('--liquid-color', 'rgba(251, 191, 36, 0.3)');
-                }
+                cauldron.classList.remove('shake'); let currentProfile = state.profiles[state.currentActive];
+                if (currentProfile.totalMins <= 0) { liquid.style.height = "15%"; document.documentElement.style.setProperty('--liquid-color', 'rgba(100, 100, 100, 0.2)');
+                } else { liquid.style.height = "65%"; document.documentElement.style.setProperty('--liquid-color', 'rgba(251, 191, 36, 0.3)'); }
             }, 1200);
 
-            // Delay Alert so Safari doesn't freeze the animation
             setTimeout(() => {
                 alert(`🔮 Portal opened! Enjoy your video time, ${activeProfile.name}.`);
-                document.getElementById('watchMins').value = '';
-                btn.disabled = false;
-                btn.innerText = "Open Video Portal";
+                document.getElementById('watchMins').value = ''; btn.disabled = false; btn.innerText = "Open Video Portal";
             }, 800);
+        }
+
+        function manualAdjust(operation) {
+            let activeProfile = state.profiles[state.currentActive];
+            let inputField = document.getElementById('adjustMins');
+            let mins = Math.floor(parseFloat(inputField.value));
+            
+            if (!mins || mins <= 0 || isNaN(mins)) { alert("Please enter a valid whole number to adjust."); return; }
+
+            if (operation === '+') {
+                activeProfile.totalMins += mins;
+                addLog(`+ Headmaster Magic: Manually Added ${mins}m`, 'log-system');
+            } else {
+                activeProfile.totalMins -= mins;
+                if (activeProfile.totalMins < 0) activeProfile.totalMins = 0; 
+                addLog(`- Headmaster Correction: Manually Removed ${mins}m`, 'log-system');
+            }
+
+            saveData();
+            inputField.value = '';
+            alert(`🪄 Headmaster spell successful! ${activeProfile.name}'s balance has been updated.`);
         }
 
         function openParentGate() {
             let password = prompt("[SECURITY VERIFICATION]\nEnter the 16-digit Headmaster Key to view logs:");
             if (password === "1979081219800707") {
-                document.getElementById('parentSection').style.display = 'block';
-                document.getElementById('openOfficeBtn').style.display = 'none';
-                renderLogs();
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            } else if (password !== null) {
-                alert("💥 Access Denied! Invalid Key.");
-            }
+                document.getElementById('parentSection').style.display = 'block'; document.getElementById('openOfficeBtn').style.display = 'none';
+                renderLogs(); window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            } else if (password !== null) { alert("💥 Access Denied! Invalid Key."); }
         }
 
         function hideParentSection() {
-            document.getElementById('parentSection').style.display = 'none';
-            document.getElementById('openOfficeBtn').style.display = 'block';
+            document.getElementById('parentSection').style.display = 'none'; document.getElementById('openOfficeBtn').style.display = 'block';
         }
 
         function clearLogs() {
             let activeProfile = state.profiles[state.currentActive];
-            if(confirm(`Do you want to burn all parchment records for ${activeProfile.name}?`)) {
-                activeProfile.logs = [];
-                addLog("Parchment cleared by Headmaster.", "log-system");
-                saveData();
+            if(confirm(`Do you want to clear the TEXT logs for ${activeProfile.name}? (This does NOT reset the time in the cauldron)`)) {
+                activeProfile.logs = []; addLog("Text Parchment cleared by Headmaster.", "log-system"); saveData();
             }
         }
 
-        // Run on start
         document.getElementById('profileSelector').value = state.currentActive;
-        checkDailyReset();
-        saveData();
+        checkDailyReset(); saveData();
     </script>
 </body>
 </html>
